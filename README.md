@@ -258,7 +258,8 @@ Now, create an instance of Guestbook helm chart. Click on `Create instance` icon
 
 
 Goto `Workloads > Pods` to view the pods. You should see 2 frontend pods, 1 redis master, 2 redis slave and pod supporting the Guestbook operator OLM.
-[Guestbook Create Instance](images/guestbook-pods.png)
+
+![Guestbook pods](images/guestbook-pods.png)
 
 
 
