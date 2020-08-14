@@ -5,12 +5,22 @@ Use the IBM Guestbook helm chart available [here](https://ibm.github.io/helm101)
 Information of creating a new operator can be found [here](https://docs.openshift.com/container-platform/4.3/operators/operator_sdk/osdk-getting-started.html)
 
 ## Setup
+
+```
+git clone https://github.com/rojanjose/guestbook-helm-operator
+cd guestbook-helm-operator
+export WORKDIR=$(pwd)
+echo $WORKDIR
+```
+
 The lab requires you to have the `operator-sdk` installed. Use the install script to setup the sdk prerequisites:
 
 ```
-./installOperator.sh VERSION=0.19.2
+sudo $WORKDIR/scripts/operatorInstall.sh VERSION=0.19.2
 ```
+
 Check the 
+
 ```
 operator-sdk version                   
 operator-sdk version: "v0.19.2", commit: "4282ce9acdef6d7a1e9f90832db4dc5a212ae850", kubernetes version: "v1.18.2", go version: "go1.14.5 darwin/amd64"
@@ -39,14 +49,7 @@ export IMG=docker.io/${DOCKER_USERNAME}/${OPERATOR_NAME}:${OPERATOR_VERSION}
 Create a new project called guestbook-operator using the existing guestbook helm chart. The guestbook chart is available at the repo `https://ibm.github.io/helm101/`.
 
 ```
-operator-sdk new guestbook-operartor --helm-chart=guestbook --helm-chart-repo=https://ibm.github.io/helm101/
-
-
-operator-sdk new $OPERATOR_PROJECT --type=helm \
-  --helm-chart=guestbook \
-  --helm-chart-repo=https://ibm.github.io/helm101/
-
-
+operator-sdk new $OPERATOR_PROJECT --type=helm --helm-chart=guestbook --helm-chart-repo=https://ibm.github.io/helm101/
 cd $OPERATOR_PROJECT
 ```
 
@@ -67,9 +70,7 @@ INFO[0002] Generated CustomResourceDefinition manifests.
 INFO[0002] Project creation complete.
 ```
 
-
 ![Generated code](images/guestbook-scafold-code.png)
-
 
 ### 3. Build the code
 
@@ -151,10 +152,13 @@ operatorhubio-catalog                           olm          CatalogSource      
 ```
 
 Create a bundle:
+
 ```
 operator-sdk generate bundle --version 1.0.0
 ```
+
 Output of the command:
+
 ```
 INFO[0000] Generating bundle manifests version 1.0.0
 
@@ -188,8 +192,10 @@ A bundle manifests directory deploy/olm-catalog/guestbook-operator-project/manif
 
 Create Project where operator OLM should be installed:
 ```
-oc new-project guest-operator-ns                                
+oc new-project guest-operator-ns
 ```
+
+Outputs,
 
 ```
 Now using project "guest-operator-ns" on server "https://c100-e.us-east.containers.cloud.ibm.com:31941".
@@ -220,13 +226,19 @@ Replace `placeholder` string with project `guest-operator-ns` in
 
 ```
 sed -i 's#namespace: placeholder#namespace: guest-operator-ns#' deploy/olm-catalog/guestbook-operator-project/manifests/guestbook-operator-project.clusterserviceversion.yaml
+```
 
+or on Mac,
+
+```
+sed -i "" 's#namespace: placeholder#namespace: guest-operator-ns#' deploy/olm-catalog/guestbook-operator-project/manifests/guestbook-operator-project.clusterserviceversion.yaml
 ```
 
 ### 4. Install the operator
 
 
 Create the Operator group:
+
 ```
 oc create -f deploy/operator_group.yaml
 ```
@@ -248,6 +260,10 @@ oc create -f deploy/role_binding.yaml
 
 Wait for few minutes for the Guestbook operator to complete the installation.
 
+```
+oc get crd guestbooks.helm.operator-sdk
+oc describe crd guestbooks.helm.operator-sdk
+```
 
 ![Guestbook operator](images/guestbook-operator.png)
 
