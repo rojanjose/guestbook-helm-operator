@@ -1,17 +1,22 @@
-# Build an Operarator using the Guestbook helm chart.
+# Build an Operator using the Guestbook helm chart.
 
-Use the IBM Guesbook helm chart available [here](https://ibm.github.io/helm101) as the base to scafold an operator.
+Use the IBM Guestbook helm chart available [here](https://ibm.github.io/helm101) as the base to scaffold an operator.
 
-Creating a new operator can be found [here](https://docs.openshift.com/container-platform/4.3/operators/operator_sdk/osdk-getting-started.html)
+Information of creating a new operator can be found [here](https://docs.openshift.com/container-platform/4.3/operators/operator_sdk/osdk-getting-started.html)
 
 ## Setup
 The lab requires you to have the `operator-sdk` installed. Use the install script to setup the sdk prerequisites:
 
 ```
-./installOperator.sh VERSION=0.19
+./installOperator.sh VERSION=0.19.2
+```
+Check the 
+```
+operator-sdk version                   
+operator-sdk version: "v0.19.2", commit: "4282ce9acdef6d7a1e9f90832db4dc5a212ae850", kubernetes version: "v1.18.2", go version: "go1.14.5 darwin/amd64"
 ```
 
-Log into your openshift cluster.
+Log into your OpenShift cluster.
 
 ```
 oc login --token=YQ2-mTJIWlz1gsWeI2tsO4CzHBbRSCQbH-IdA3tEFrM --server=https://c100-e.us-east.containers.cloud.ibm.com:32055
@@ -26,14 +31,12 @@ Export these environment variables prior to starting the project.
 export DOCKER_USERNAME=<your-docker-username>
 export OPERATOR_NAME=guestbook-operator
 export OPERATOR_PROJECT=guestbook-operator-project
-export OPERATOR_GROUP=guestbook.remkoh.dev
 export OPERATOR_VERSION=v1.0.0
 
 export IMG=docker.io/${DOCKER_USERNAME}/${OPERATOR_NAME}:${OPERATOR_VERSION}
-docker.io/rojanjose/guestbook-operator:v1.0.0
 ```
 
-Create project called guestbook-operator using the existing guestbook helm chart. The guestbook chart is available at the repo `https://ibm.github.io/helm101/`.
+Create a new project called guestbook-operator using the existing guestbook helm chart. The guestbook chart is available at the repo `https://ibm.github.io/helm101/`.
 
 ```
 operator-sdk new guestbook-operartor --helm-chart=guestbook --helm-chart-repo=https://ibm.github.io/helm101/
@@ -212,7 +215,7 @@ spec:
 EOF
 ```
 
-Replace placehlder with project guest-operator-ns in
+Replace `placeholder` string with project `guest-operator-ns` in
 `guestbook-operator.clusterserviceversion.yaml`      
 
 ```
@@ -248,7 +251,7 @@ Wait for few minutes for the Guestbook operator to complete the installation.
 
 ![Guestbook operator](images/guestbook-operator.png)
 
-Open the operator and validate the install succeded.
+Open the operator and validate the install succeeded.
 
 ![Guestbook opertor](images/guestbook-operator-details.png)
 
@@ -257,7 +260,7 @@ Now, create an instance of Guestbook helm chart. Click on `Create instance` icon
 ![Guestbook Create Instance](images/guestbook-create-instance.png)
 
 
-Goto `Workloads > Pods` to view the pods. You should see 2 frontend pods, 1 redis master, 2 redis slave and pod supporting the Guestbook operator OLM.
+Goto `Workloads > Pods` to view the pods. You should see 2 frontend pods, 1 Redis master, 2 Redis slave and pod supporting the Guestbook operator OLM.
 
 ![Guestbook pods](images/guestbook-pods.png)
 
